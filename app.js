@@ -14,32 +14,42 @@ function getRenderedHTML(url, callback) {
     }
   };
 
-  //request(options, requestCallback);
+  request(options, requestCallback);
 }
 
 var jsdom = require("jsdom");
 var window = jsdom.jsdom().defaultView;
 
 var fs = require('fs');
-var body = fs.readFileSync("./body.txt", "utf-8");
-findHyperlinks(body, function(err, links) {
+
+getRenderedHTML('/', function(err, body) {
   if (err) {
     console.log(err);
   }
   else {
-    getInternalLinks(links, function(err, internalLinks) {
+    findHyperlinks(body, function(err, links) {
       if (err) {
         console.log(err);
       }
       else {
-        getUniqueLinks(internalLinks, function(err, uniqueLinks) {
+        getInternalLinks(links, function(err, internalLinks) {
           if (err) {
             console.log(err);
           }
           else {
-            appendLinksToCSVFile(uniqueLinks, function(err) {
+            getUniqueLinks(internalLinks, function(err, uniqueLinks) {
               if (err) {
                 console.log(err);
+              }
+              else {
+                appendLinksToCSVFile(uniqueLinks, function(err) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  else{
+                    
+                  }
+                });
               }
             });
           }
