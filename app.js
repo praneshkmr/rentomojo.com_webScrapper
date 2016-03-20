@@ -19,7 +19,14 @@ findHyperlinks(body, function(err, links) {
     console.log(err);
   }
   else {
-    console.log(links);
+    getInternalLinks(links, function(err, internalLinks) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log(internalLinks);
+      }
+    });
   }
 });
 
@@ -47,6 +54,17 @@ function findHyperlinks(html, callback){
     });
     callback(null,links);
   });
+}
+
+function getInternalLinks(links, callback) {
+  var internalLinks = [];
+  links.forEach(function(link){
+    var firstChar = link.substring(0,1);
+    if(firstChar === "/"){
+      internalLinks.push(link);
+    }
+  });
+  callback(null,internalLinks);
 }
 
 //request(options, callback);
