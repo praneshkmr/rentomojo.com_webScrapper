@@ -1,16 +1,24 @@
 var request = require('request');
 
+function getRenderedHTML(url, callback) {
+  var options = {
+    url: 'https://www.rentomojo.com' + url + '?_escaped_fragment_',
+    headers: {
+      'User-Agent': 'Node.js Scraper'
+    }
+  };
+
+  function requestCallback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      callback(null, body);
+    }
+  };
+
+  //request(options, requestCallback);
+}
+
 var jsdom = require("jsdom");
 var window = jsdom.jsdom().defaultView;
-
-//var $=require('jquery');
-
-var options = {
-  url: 'https://www.rentomojo.com/?_escaped_fragment_',
-  headers: {
-    'User-Agent': 'Node.js Scraper'
-  }
-};
 
 var fs = require('fs');
 var body = fs.readFileSync("./body.txt", "utf-8");
@@ -24,22 +32,18 @@ findHyperlinks(body, function(err, links) {
         console.log(err);
       }
       else {
-        console.log(internalLinks);
+        getUniqueLinks(internalLinks, function(err, uniqueLinks) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+            console.log(uniqueLinks);
+          }
+        });
       }
     });
   }
 });
-
-//$("<h1>test passes</h1>").appendTo("body");
-//console.log($("body").html());
-
-function callback(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    //$(body).appendTo("body");
-    //console.log($("body").html());
-
-  }
-}
 
 function findHyperlinks(html, callback){
   jsdom.jQueryify(window, "./jquery.js", function () {
@@ -67,4 +71,44 @@ function getInternalLinks(links, callback) {
   callback(null,internalLinks);
 }
 
-//request(options, callback);
+var HyperlinksSet = (function () {
+  var Set = require("collections/set");
+  var instance = new Set(["/"]);
+
+  return {
+    hasHyperLink : function(link){
+      return instance.has(link);
+    },
+    addHyperlink : function(link){
+      instance.add(link);
+    }
+  }
+})();
+
+// Unit Tests for HyperlinksSet
+//
+// HyperlinksSet.hasHyperLink("/", function (err, hasHyperLink) {
+//   console.log(hasHyperLink);
+// });
+//
+// HyperlinksSet.hasHyperLink("/asa", function (err, hasHyperLink) {
+//   console.log(hasHyperLink);
+//   HyperlinksSet.addHyperlink("/asa", function (err, hasHyperLink) {
+//     console.log(hasHyperLink);
+//     HyperlinksSet.hasHyperLink("/asa", function (err, hasHyperLink) {
+//       console.log(hasHyperLink);
+//     });
+//   });
+// });
+
+function getUniqueLinks(links, callback) {
+  var uniqueLinks = [];
+  links.forEach(function(link){
+    var hasHyperLink = HyperlinksSet.hasHyperLink(link);
+    if (!hasHyperLink) {
+      uniqueLinks.push(link);
+      HyperlinksSet.addHyperlink(link);
+    }
+  });
+  callback(null, uniqueLinks);
+};
