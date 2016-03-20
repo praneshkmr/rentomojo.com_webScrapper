@@ -22,42 +22,54 @@ var window = jsdom.jsdom().defaultView;
 
 var fs = require('fs');
 
-getRenderedHTML('/', function(err, body) {
-  if (err) {
-    console.log(err);
-  }
-  else {
-    findHyperlinks(body, function(err, links) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        getInternalLinks(links, function(err, internalLinks) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            getUniqueLinks(internalLinks, function(err, uniqueLinks) {
-              if (err) {
-                console.log(err);
-              }
-              else {
-                appendLinksToCSVFile(uniqueLinks, function(err) {
-                  if (err) {
-                    console.log(err);
-                  }
-                  else{
-                    
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-});
+function recursiveBusinessLogic(path) {
+  getRenderedHTML(path, function(err, body) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      findHyperlinks(body, function(err, links) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          getInternalLinks(links, function(err, internalLinks) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              getUniqueLinks(internalLinks, function(err, uniqueLinks) {
+                if (err) {
+                  console.log(err);
+                }
+                else {
+                  appendLinksToCSVFile(uniqueLinks, function(err) {
+                    if (err) {
+                      console.log(err);
+                    }
+                    else{
+                      processNextLevelPaths(uniqueLinks, function (err) {
+
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+}
+
+recursiveBusinessLogic('/');
+
+function processNextLevelPaths(links, callback){
+  links.forEach(function(link){
+    recursiveBusinessLogic(link);
+  });
+};
 
 function findHyperlinks(html, callback){
   jsdom.jQueryify(window, "./jquery.js", function () {
