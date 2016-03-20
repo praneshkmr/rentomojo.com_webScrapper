@@ -37,7 +37,11 @@ findHyperlinks(body, function(err, links) {
             console.log(err);
           }
           else {
-            console.log(uniqueLinks);
+            appendLinksToCSVFile(uniqueLinks, function(err) {
+              if (err) {
+                console.log(err);
+              }
+            });
           }
         });
       }
@@ -112,3 +116,20 @@ function getUniqueLinks(links, callback) {
   });
   callback(null, uniqueLinks);
 };
+
+function appendLinksToCSVFile(links, callback){
+  var count = 0;
+  links.forEach(function(link){
+    fs.appendFile('links.csv', link + '\n' , function (err) {
+      if(err){
+        callback(err);
+      }
+      else{
+        count += 1;
+      }
+      if(count == links.length){
+        callback(null);
+      }
+    });
+  });
+}
