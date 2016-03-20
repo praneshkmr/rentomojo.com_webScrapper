@@ -41,7 +41,9 @@ function findHyperlinks(html, callback){
     var links = [];
     anchors.each(function( index ) {
       var link = $( this ).attr("href");
-      links.push(link);
+      if(link != undefined){
+        links.push(link);
+      };
     });
     callback(null,links);
   });
