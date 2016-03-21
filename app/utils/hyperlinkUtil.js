@@ -1,6 +1,8 @@
 var jsdom = require("jsdom");
 var window = jsdom.jsdom().defaultView;
 
+var HyperlinkSet = require("./hyperlinkSet");
+
 var HyperlinkUtil  = {};
 
 HyperlinkUtil.findHyperlinks = function (html, callback){
@@ -29,43 +31,13 @@ HyperlinkUtil.getInternalLinks = function (links, callback) {
   callback(null,internalLinks);
 }
 
-var HyperlinksSet = (function () {
-  var Set = require("collections/set");
-  var instance = new Set(["/"]);
-
-  return {
-    hasHyperLink : function(link){
-      return instance.has(link);
-    },
-    addHyperlink : function(link){
-      instance.add(link);
-    }
-  }
-})();
-
-// Unit Tests for HyperlinksSet
-//
-// HyperlinksSet.hasHyperLink("/", function (err, hasHyperLink) {
-//   console.log(hasHyperLink);
-// });
-//
-// HyperlinksSet.hasHyperLink("/asa", function (err, hasHyperLink) {
-//   console.log(hasHyperLink);
-//   HyperlinksSet.addHyperlink("/asa", function (err, hasHyperLink) {
-//     console.log(hasHyperLink);
-//     HyperlinksSet.hasHyperLink("/asa", function (err, hasHyperLink) {
-//       console.log(hasHyperLink);
-//     });
-//   });
-// });
-
 HyperlinkUtil.getUniqueLinks = function (links, callback) {
   var uniqueLinks = [];
   links.forEach(function(link){
-    var hasHyperLink = HyperlinksSet.hasHyperLink(link);
+    var hasHyperLink = HyperlinkSet.hasHyperLink(link);
     if (!hasHyperLink) {
       uniqueLinks.push(link);
-      HyperlinksSet.addHyperlink(link);
+      HyperlinkSet.addHyperlink(link);
     }
   });
   callback(null, uniqueLinks);
