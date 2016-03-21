@@ -1,6 +1,6 @@
-var pageGrabberUtil = require("./app/utils/pageGrabberUtil");
-var hyperlinkUtil = require("./app/utils/hyperlinkUtil");
-var csvExporterUtil = require("./app/utils/csvExporterUtil");
+var pageGrabberUtil = require("../../app/utils/pageGrabberUtil");
+var hyperlinkUtil = require("../../app/utils/hyperlinkUtil");
+var csvExporterUtil = require("../../app/utils/csvExporterUtil");
 
 function recursiveBusinessLogic(path) {
   pageGrabberUtil.getRenderedHTML(path, function(err, body) {
