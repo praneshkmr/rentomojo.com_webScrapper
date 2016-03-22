@@ -17,3 +17,12 @@ describe("Hyperlink Util - getInternalLinks", function () {
     });
   });
 });
+
+describe("Hyperlink Util - getUniqueLinks", function () {
+  it("should filter only Unique hyperlinks", function () {
+    var links = ['/bangalore','/delhi','/delhi']
+    hyperlinkUtil.getUniqueLinks(links, function (err, uniqueLinks) {
+      expect(uniqueLinks).toEqual([ '/bangalore', '/delhi' ]);
+    });
+  });
+});
