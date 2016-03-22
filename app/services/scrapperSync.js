@@ -43,10 +43,12 @@ function recursiveBusinessLogic(path) {
   });
 }
 
-recursiveBusinessLogic('/');
-
 function processNextLevelPaths(links, callback){
   links.forEach(function(link){
     recursiveBusinessLogic(link);
   });
 };
+
+module.exports = function () {
+  recursiveBusinessLogic('/');
+}

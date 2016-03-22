@@ -39,6 +39,8 @@ processPathQueue.drain = function() {
     console.log('All Paths have been processed');
 }
 
-processPathQueue.push('/', function (err) {
+module.exports = function () {
+  processPathQueue.push('/', function (err) {
 
-});
+  });
+}
