@@ -5,7 +5,7 @@ var csvExporterUtil = {};
 csvExporterUtil.appendLinksToCSVFile = function (links, callback){
   var count = 0;
   links.forEach(function(link){
-    fs.appendFile('links.csv', link + '\n' , function (err) {
+    fs.appendFile('linksSync.csv', link + '\n' , function (err) {
       if(err){
         callback(err);
       }
@@ -20,7 +20,7 @@ csvExporterUtil.appendLinksToCSVFile = function (links, callback){
 }
 
 csvExporterUtil.appendLinkToCSVFile = function (link, callback){
-  fs.appendFile('links.csv', link + '\n' , function (err) {
+  fs.appendFile('linksAsync.csv', link + '\n' , function (err) {
     if(err){
       callback(err);
     }
