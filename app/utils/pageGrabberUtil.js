@@ -14,6 +14,13 @@ PageGrabber.getRenderedHTML = function (url, callback) {
     if (!error && response.statusCode == 200) {
       callback(null, body);
     }
+    else if(error){
+      callback(error);
+    }
+    else{
+      console.log("response code : "+response.statusCode);
+      callback("Non success response code");
+    }
   };
 
   request(options, requestCallback);

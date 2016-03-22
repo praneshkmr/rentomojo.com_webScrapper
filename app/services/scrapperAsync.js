@@ -17,7 +17,10 @@ function processPath(path, callback) {
     else {
       console.log(result);
       processPathQueue.push(result, function (err) {
-          console.log('finished processing item');
+
+      });
+      csvExporterQueue.push(result, function (err) {
+
       });
     }
     callback(err,result);
@@ -27,6 +30,10 @@ function processPath(path, callback) {
 var processPathQueue = async.queue(function (path, callback) {
     processPath(path, callback);
 }, 2);
+
+var csvExporterQueue = async.queue(function (path, callback) {
+    csvExporterUtil.appendLinkToCSVFile(path, callback);
+}, 1);
 
 processPathQueue.drain = function() {
     console.log('All Paths have been processed');

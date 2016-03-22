@@ -19,4 +19,15 @@ csvExporterUtil.appendLinksToCSVFile = function (links, callback){
   });
 }
 
+csvExporterUtil.appendLinkToCSVFile = function (link, callback){
+  fs.appendFile('links.csv', link + '\n' , function (err) {
+    if(err){
+      callback(err);
+    }
+    else{
+      callback(null,link);
+    }
+  });
+}
+
 module.exports = csvExporterUtil;
