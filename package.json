@@ -4,6 +4,7 @@
   "description": "Program test for Rentomojo",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "node jasmine_test.js"
   },
   "author": "praneshkmr@gmail.com",
