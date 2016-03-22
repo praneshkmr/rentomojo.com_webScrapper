@@ -1,4 +1,12 @@
 var request = require('request');
+var throttledRequest = require('throttled-request')(request);
+
+var MAX_REQUESTS = 5;
+
+throttledRequest.configure({
+  requests: MAX_REQUESTS,
+  milliseconds: 1000
+});
 
 var PageGrabber = {};
 
@@ -18,12 +26,12 @@ PageGrabber.getRenderedHTML = function (url, callback) {
       callback(error);
     }
     else{
-      console.log("response code : "+response.statusCode);
-      callback("Non success response code");
+      callback("Non success response code : ",response.statusCode);
     }
   };
 
-  request(options, requestCallback);
+  console.log("Fetching ",url);
+  throttledRequest(options, requestCallback);
 }
 
 module.exports = PageGrabber;

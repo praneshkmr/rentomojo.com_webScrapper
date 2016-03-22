@@ -15,7 +15,7 @@ function processPath(path, callback) {
       console.log(err);
     }
     else {
-      console.log(result);
+      console.log("Got Following Unique paths",result);
       processPathQueue.push(result, function (err) {
 
       });
