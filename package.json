@@ -11,7 +11,10 @@
   "dependencies": {
     "async": "^2.0.0-rc.1",
     "collections": "^3.0.0",
+    "jasmine": "^2.4.1",
+    "jsdom": "^8.1.0",
     "readline-sync": "^1.4.1",
+    "request": "^2.69.0",
     "throttled-request": "^0.1.1"
   }
 }
